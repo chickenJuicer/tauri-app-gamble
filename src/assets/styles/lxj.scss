@@ -1,0 +1,142 @@
+@import "./variables.scss";
+
+$main-bgc-gray: $graye;
+
+.f-start-center,
+.f-end-center,
+.f-between-center,
+.f-around-center,
+.f-center-center {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.f-start-center {
+  justify-content: flex-start;
+}
+
+.f-end-center {
+  justify-content: flex-end;
+}
+
+.f-between-center {
+  justify-content: space-between;
+}
+
+.f-around-center {
+  justify-content: space-around;
+}
+
+.f-center-center {
+  justify-content: center;
+}
+
+.f-c-start-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content:space-around;
+}
+.f-c-around {
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
+}
+.f-c-end{
+  display: flex;
+  flex-direction: column;
+  align-content: flex-end;
+}
+.box-container,.box-container-round{
+  background-color: $white;
+  padding: 10px;
+}
+.box-container-round{
+  border-radius: 10px;
+}
+
+.vbtn{
+  font-weight: 900;
+  padding: 0 20px;
+}
+
+
+
+.c-white {
+  color: $white
+}
+
+
+
+
+$base1: 1px;
+$p: padding;
+$pl: padding-left;
+$pr: padding-right;
+$pt: padding-top;
+$pb: padding-bottom;
+$m: margin;
+$ml: margin-left;
+$mr: margin-right;
+$mt: margin-top;
+$mb: margin-bottom;
+$list:1,2,3,4,5, 10, 12, 14,15, 16, 18, 20, 22, 24, 25, 26, 30, 40, 50, 60, 70, 80, 100, 120, 140, 160;
+$fz-list: 12,13, 14,15, 16, 18, 20, 22, 24, 30, 32, 36, 40, 44, 48, 50, 60, 80, 100;
+// .fz12{font-size:12px .fz14{font-size:14px}...
+@each $value in $fz-list {
+  .fz#{$value} {
+    font-size: $value * $base1;
+  }
+}
+
+@each $value in $list {
+  .p#{$value} {
+    #{$p}: ($base1 * $value);
+  }
+  .pl#{$value} {
+    #{$pl}: ($base1 * $value);
+  }
+  .pr#{$value} {
+    #{$pr}: ($base1 * $value);
+  }
+  .pt#{$value} {
+    #{$pt}: ($base1 * $value);
+  }
+  .pb#{$value} {
+    #{$pb}: ($base1 * $value);
+  }
+  .m#{$value} {
+    #{$m}: ($base1 * $value);
+  }
+  .ml#{$value} {
+    #{$ml}: ($base1 * $value);
+  }
+  .mr#{$value} {
+    #{$mr}: ($base1 * $value);
+  }
+  .mt#{$value} {
+    #{$mt}: ($base1 * $value);
+  }
+  .mb#{$value} {
+    #{$mb}: ($base1 * $value);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #ebeef5;
+}
+
+::-webkit-scrollbar-thumb {
+  box-shadow: 0 0 6px rgba(56, 55, 55, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(56, 55, 55, 0.3);
+  background-color: #ccc;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: 0 0 5px rgba(56, 55, 55, 0.2);
+  //border-radius: 8px;
+  background: rgba(255, 255, 255, 1);
+}
