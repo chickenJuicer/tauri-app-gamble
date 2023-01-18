@@ -37,11 +37,11 @@
 
 <script setup lang="ts">
 import NumScroll from "@/views/gamble/components/numScroll.vue";
-import {computed, reactive, ref} from 'vue'
+import {computed, reactive, Ref, ref} from 'vue'
 
 
-let shi_start_num = 0
-let ge_start_num = 0
+let shi_start_num = 0//十位数初始值
+let ge_start_num = 0//个位数初始值
 
 interface gamble_winner_list_itf {
   one: String[],
@@ -49,19 +49,20 @@ interface gamble_winner_list_itf {
   three: String[],
 }
 
+//获奖列表
 let gamble_winner_list: gamble_winner_list_itf = reactive({
   one: [],
   two: [],
   three: [],
 })
-// 行则，恭喜发财 嘻嘻嘻
+// 行则，恭喜发财 嘻嘻嘻// 黑名单
 const gamble_winner_negative = ["66"]
 
 let startBtnDisable = ref(false)
 let btn_label = ref('💪开始抽奖💪')
 
-const NS_shi = ref(null)
-const NS_ge = ref(null)
+const NS_shi: Ref<InstanceType<typeof NumScroll> | null> = ref(null)
+const NS_ge: Ref<InstanceType<typeof NumScroll> | null> = ref(null)
 
 const isEndGamble = computed(() => {
   return gamble_winner_list.one.length === 1 &&
@@ -79,8 +80,10 @@ const start = () => {
     return
   }
   btn_label.value = "🧨好运降临🧨"
-  NS_shi.value.startAnimation(Number(shi))
-  NS_ge.value.startAnimation(Number(ge))
+  //抽十位数;
+  NS_shi.value && NS_shi.value.startAnimation(Number(shi))
+  //抽个位数;
+  NS_ge.value && NS_ge.value.startAnimation(Number(ge))
   setTimeout(() => {
     if (gamble_winner_list.three.length < 5)
       gamble_winner_list.three.push(`${shi}${ge}`)
@@ -134,9 +137,11 @@ const getRandomNum: RandomFunc = () => {
   border-radius: 40px;
   color: white;
 }
-.winner-item{
+
+.winner-item {
   line-height: 1.5;
 }
+
 .winner-list {
   display: inline-block;
   line-height: 1;

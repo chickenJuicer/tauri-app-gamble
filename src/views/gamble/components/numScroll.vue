@@ -15,74 +15,83 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "gambleIndex",
-  props: {
-    delay: {default: 0, type: Number},
-    during: {default: 2, type: Number},
-    startNum: {default: 3, type: Number},
-  },
-  data() {
-    return {
-      animateStart: false,
-      num_list: [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+<script setup lang="ts">
+import {defineProps, onMounted, Ref, ref} from "vue";
 
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-      ],
-      animation_N: '',
-      restart: false,
-      newStartNum: 0,
-      lastEndNum: 9,
-    }
-  },
-  mounted() {
-    if (this.startNum !== 0) {
-      for (let i = 9; i >= this.startNum; i--)
-        this.num_list.unshift(i);
-    }
-  },
-  methods: {
-    startAnimation(endNum) {
-      this.lastEndNum = endNum;
-      if (endNum !== 9) {
-        for (let i = 0; i <= endNum; i++) {
-          this.num_list.push(i);
-        }
-      }
-      this.animation_N = 'num-ul-animation-' + this.num_list.length;
-      this.$refs['num_ul'].style.animationDelay = this.delay + 's'
-      this.$refs['num_ul'].style.animationDuration = this.during + 's'
-      this.animateStart = true
-    },
-    resetNumList() {
-      this.animateStart = false
-      this.num_list = [];
-      if (this.lastEndNum !== 0) {
-        for (let i = 9; i >= this.lastEndNum; i--)
-          this.num_list.unshift(i);
-      }
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-          this.num_list.push(j);
-        }
-      }
-    },
-
-  }
+interface NumScrollPropsInf {
+  delay: number,
+  during: number,
+  startNum: number
 }
+
+const props = withDefaults(defineProps<NumScrollPropsInf>(),{
+  delay: 0,
+  during: 2,
+  startNum: 3
+})
+let animateStart: Ref<boolean> = ref(false);
+let num_list: Ref<number[]> = ref([
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+])
+let animation_N: Ref<string> = ref('');
+
+
+let lastEndNum: Ref<number> = ref(9);
+
+onMounted(() => {
+  if (props.startNum !== 0) {
+    for (let i = 9; i >= props.startNum; i--)
+      num_list.value.unshift(i);
+  }
+})
+
+const num_ul: Ref<HTMLElement | null> = ref(null)
+
+const startAnimation = (endNum: number) => {
+  lastEndNum.value = endNum;
+  if (endNum !== 9) {
+    for (let i = 0; i <= endNum; i++) {
+      num_list.value.push(i);
+    }
+  }
+  animation_N.value = 'num-ul-animation-' + num_list.value.length;
+  num_ul.value!.style.animationDelay = props.delay + 's'
+  num_ul.value!.style.animationDuration = props.during + 's'
+  animateStart.value = true
+};
+const resetNumList = () => {
+  animateStart.value = false
+  num_list.value = [];
+  if (lastEndNum.value !== 0) {
+    for (let i = 9; i >= lastEndNum.value; i--)
+      num_list.value.unshift(i);
+  }
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+      num_list.value.push(j);
+    }
+  }
+};
+
+
+defineExpose({
+  startAnimation
+})
+
+
 </script>
 
 <style scoped lang="scss">
@@ -92,6 +101,7 @@ export default {
   width: 180px;
   height: 240px;
   overflow: hidden;
+
   .num-ul {
     position: absolute;
 
