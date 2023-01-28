@@ -10,7 +10,7 @@
         @animationcancel="resetNumList"
         @animationend="resetNumList"
     >
-      <div v-for="num in num_list" class="num-li">{{ num }}</div>
+      <div v-for="(num,index) in num_list" :key="index" class="num-li">{{ num }}</div>
     </div>
   </div>
 </template>
@@ -19,9 +19,9 @@
 import {defineProps, onMounted, Ref, ref} from "vue";
 
 interface NumScrollPropsInf {
-  delay: number,
-  during: number,
-  startNum: number
+  delay?: number,
+  during?: number,
+  startNum?: number
 }
 
 const props = withDefaults(defineProps<NumScrollPropsInf>(),{
@@ -47,8 +47,6 @@ let num_list: Ref<number[]> = ref([
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 ])
 let animation_N: Ref<string> = ref('');
-
-
 let lastEndNum: Ref<number> = ref(9);
 
 onMounted(() => {
@@ -59,7 +57,7 @@ onMounted(() => {
 })
 
 const num_ul: Ref<HTMLElement | null> = ref(null)
-
+// 开始动画；
 const startAnimation = (endNum: number) => {
   lastEndNum.value = endNum;
   if (endNum !== 9) {
@@ -72,6 +70,7 @@ const startAnimation = (endNum: number) => {
   num_ul.value!.style.animationDuration = props.during + 's'
   animateStart.value = true
 };
+// 重置数字列表；
 const resetNumList = () => {
   animateStart.value = false
   num_list.value = [];

@@ -55,7 +55,7 @@ let gamble_winner_list: gamble_winner_list_itf = reactive({
   two: [],
   three: [],
 })
-// 行则，恭喜发财 嘻嘻嘻// 黑名单
+// 行则，恭喜发财 嘻嘻嘻 ｜ 黑名单
 const gamble_winner_negative = ["66"]
 
 let startBtnDisable = ref(false)
@@ -80,10 +80,11 @@ const start = () => {
     return
   }
   btn_label.value = "🧨好运降临🧨"
-  //抽十位数;
+  // 抽十位数;
   NS_shi.value && NS_shi.value.startAnimation(Number(shi))
-  //抽个位数;
+  // 抽个位数;
   NS_ge.value && NS_ge.value.startAnimation(Number(ge))
+  // 动画结束后， 处理抽奖结果到页面上；
   setTimeout(() => {
     if (gamble_winner_list.three.length < 5)
       gamble_winner_list.three.push(`${shi}${ge}`)
