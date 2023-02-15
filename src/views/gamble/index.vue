@@ -1,19 +1,8 @@
 <template>
-  <div class='gamble-container'>
+  <div class="gamble-container">
     <div class="f-center-center">
-      <NumScroll
-          ref="NS_shi"
-          :delay="0.2"
-          :during="2.2"
-          :start-num="shi_start_num"
-          style="margin-right: 40px;"
-      ></NumScroll>
-      <NumScroll
-          ref="NS_ge"
-          :delay="0"
-          :during="2"
-          :start-num="ge_start_num"
-      ></NumScroll>
+      <NumScroll ref="NS_shi" :delay="0.2" :during="2.2" :start-num="shi_start_num" style="margin-right: 40px"></NumScroll>
+      <NumScroll ref="NS_ge" :delay="0" :during="2" :start-num="ge_start_num"></NumScroll>
     </div>
     <div class="mt40">
       <div class="winner-item">
@@ -36,17 +25,19 @@
 </template>
 
 <script setup lang="ts">
-import NumScroll from "@/views/gamble/components/numScroll.vue";
-import {computed, reactive, Ref, ref} from 'vue'
+import NumScroll from "@/views/gamble/components/numScroll.vue"
+import { computed, reactive, Ref, ref } from "vue"
+import { configStore } from "../../stores/config"
 
+const config = configStore()
 
-let shi_start_num = 0//十位数初始值
-let ge_start_num = 0//个位数初始值
+let shi_start_num = 0 //十位数初始值
+let ge_start_num = 0 //个位数初始值
 
 interface gamble_winner_list_itf {
-  one: String[],
-  two: String[],
-  three: String[],
+  one: string[]
+  two: string[]
+  three: string[]
 }
 
 //获奖列表
@@ -56,27 +47,24 @@ let gamble_winner_list: gamble_winner_list_itf = reactive({
   three: [],
 })
 // 行则，恭喜发财 嘻嘻嘻 ｜ 黑名单
-const gamble_winner_negative = ["66"]
+const gamble_winner_negative: string[] = ["66"]
 
 let startBtnDisable = ref(false)
-let btn_label = ref('💪开始抽奖💪')
+let btn_label = ref("💪开始抽奖💪")
 
 const NS_shi: Ref<InstanceType<typeof NumScroll> | null> = ref(null)
 const NS_ge: Ref<InstanceType<typeof NumScroll> | null> = ref(null)
 
 const isEndGamble = computed(() => {
-  return gamble_winner_list.one.length === 1 &&
-      gamble_winner_list.two.length === 3 &&
-      gamble_winner_list.three.length === 5
+  return gamble_winner_list.one.length === config.winner_num_1st && gamble_winner_list.two.length === config.winner_num_2nd && gamble_winner_list.three.length === config.winner_num_3rd
 })
-
 
 const start = () => {
   startBtnDisable.value = true
-  const [shi, ge] = getRandomNum();
-  console.log(NS_shi.value, 'NS_shi.value');
+  const [shi, ge] = getRandomNum()
+  console.log(NS_shi.value, "NS_shi.value")
   if (isEndGamble.value) {
-    btn_label.value = '🎉🎉🎉🎉🎉🎉'
+    btn_label.value = "🎉🎉🎉🎉🎉🎉"
     return
   }
   btn_label.value = "🧨好运降临🧨"
@@ -86,34 +74,25 @@ const start = () => {
   NS_ge.value && NS_ge.value.startAnimation(Number(ge))
   // 动画结束后， 处理抽奖结果到页面上；
   setTimeout(() => {
-    if (gamble_winner_list.three.length < 5)
-      gamble_winner_list.three.push(`${shi}${ge}`)
-    else if (gamble_winner_list.two.length < 3)
-      gamble_winner_list.two.push(`${shi}${ge}`)
-    else if (gamble_winner_list.one.length < 1)
-      gamble_winner_list.one.push(`${shi}${ge}`)
-    startBtnDisable.value = false;
+    if (gamble_winner_list.three.length < config.winner_num_3rd) gamble_winner_list.three.push(`${shi}${ge}`)
+    else if (gamble_winner_list.two.length < config.winner_num_2nd) gamble_winner_list.two.push(`${shi}${ge}`)
+    else if (gamble_winner_list.one.length < config.winner_num_1st) gamble_winner_list.one.push(`${shi}${ge}`)
+    startBtnDisable.value = false
 
-    btn_label.value = isEndGamble.value ? '🎉🎉🎉🎉🎉🎉' : "💪开始抽奖💪"
-
+    btn_label.value = isEndGamble.value ? "🎉🎉🎉🎉🎉🎉" : "💪开始抽奖💪"
   }, 3000)
-};
-
-type RandomFunc = () => [String, String];
-const getRandomNum: RandomFunc = () => {
-  let numStr = '00'
-  do {
-    numStr = Math.ceil(Math.random() * 71).toString().padStart(2, '0')
-  } while (
-      gamble_winner_list.one.includes(numStr) ||
-      gamble_winner_list.two.includes(numStr) ||
-      gamble_winner_list.three.includes(numStr) ||
-      gamble_winner_negative.includes(numStr)
-      )
-  return [numStr[0], numStr[1]]
 }
 
-
+type RandomFunc = () => [string, string]
+const getRandomNum: RandomFunc = () => {
+  let numStr = "00"
+  do {
+    numStr = Math.ceil(Math.random() * config.end_num)
+      .toString()
+      .padStart(2, "0")
+  } while (gamble_winner_list.one.includes(numStr) || gamble_winner_list.two.includes(numStr) || gamble_winner_list.three.includes(numStr) || gamble_winner_negative.includes(numStr))
+  return [numStr[0], numStr[1]]
+}
 </script>
 
 <style scoped lang="scss">

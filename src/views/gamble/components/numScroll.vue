@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, onMounted, Ref, ref} from "vue";
+import {onMounted, Ref, ref} from "vue";
 
 interface NumScrollPropsInf {
   delay?: number,
