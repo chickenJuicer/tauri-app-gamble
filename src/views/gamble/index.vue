@@ -1,7 +1,8 @@
 <template>
   <div class="gamble-container">
     <div class="f-center-center">
-      <NumScroll ref="NS_shi" :delay="0.2" :during="2.2" :start-num="shi_start_num" style="margin-right: 40px"></NumScroll>
+      <NumScroll ref="NS_shi" :delay="0.2" :during="2.2" :start-num="shi_start_num"
+                 style="margin-right: 40px"></NumScroll>
       <NumScroll ref="NS_ge" :delay="0" :during="2" :start-num="ge_start_num"></NumScroll>
     </div>
     <div class="mt40">
@@ -26,8 +27,8 @@
 
 <script setup lang="ts">
 import NumScroll from "@/views/gamble/components/numScroll.vue"
-import { computed, reactive, Ref, ref } from "vue"
-import { configStore } from "../../stores/config"
+import {computed, reactive, Ref, ref} from "vue"
+import {configStore} from "../../stores/config"
 
 const config = configStore()
 
@@ -56,7 +57,9 @@ const NS_shi: Ref<InstanceType<typeof NumScroll> | null> = ref(null)
 const NS_ge: Ref<InstanceType<typeof NumScroll> | null> = ref(null)
 
 const isEndGamble = computed(() => {
-  return gamble_winner_list.one.length === config.winner_num_1st && gamble_winner_list.two.length === config.winner_num_2nd && gamble_winner_list.three.length === config.winner_num_3rd
+  return gamble_winner_list.one.length === config.winner_num_1st
+    && gamble_winner_list.two.length === config.winner_num_2nd
+    && gamble_winner_list.three.length === config.winner_num_3rd
 })
 
 const start = () => {
@@ -74,9 +77,12 @@ const start = () => {
   NS_ge.value && NS_ge.value.startAnimation(Number(ge))
   // 动画结束后， 处理抽奖结果到页面上；
   setTimeout(() => {
-    if (gamble_winner_list.three.length < config.winner_num_3rd) gamble_winner_list.three.push(`${shi}${ge}`)
-    else if (gamble_winner_list.two.length < config.winner_num_2nd) gamble_winner_list.two.push(`${shi}${ge}`)
-    else if (gamble_winner_list.one.length < config.winner_num_1st) gamble_winner_list.one.push(`${shi}${ge}`)
+    if (gamble_winner_list.three.length < config.winner_num_3rd)
+      gamble_winner_list.three.push(`${shi}${ge}`)
+    else if (gamble_winner_list.two.length < config.winner_num_2nd)
+      gamble_winner_list.two.push(`${shi}${ge}`)
+    else if (gamble_winner_list.one.length < config.winner_num_1st)
+      gamble_winner_list.one.push(`${shi}${ge}`)
     startBtnDisable.value = false
 
     btn_label.value = isEndGamble.value ? "🎉🎉🎉🎉🎉🎉" : "💪开始抽奖💪"
@@ -90,7 +96,12 @@ const getRandomNum: RandomFunc = () => {
     numStr = Math.ceil(Math.random() * config.end_num)
       .toString()
       .padStart(2, "0")
-  } while (gamble_winner_list.one.includes(numStr) || gamble_winner_list.two.includes(numStr) || gamble_winner_list.three.includes(numStr) || gamble_winner_negative.includes(numStr))
+  } while (
+    gamble_winner_list.one.includes(numStr)
+    || gamble_winner_list.two.includes(numStr)
+    || gamble_winner_list.three.includes(numStr)
+    || gamble_winner_negative.includes(numStr)
+    )
   return [numStr[0], numStr[1]]
 }
 </script>
